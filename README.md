@@ -153,9 +153,9 @@ if (isLoggedIn)
         // connect to the chat server 57
         await webSocketConnection.ConnectAsync(57);
         
-        await webSocketConnection.JoinPrivateChatChannelAsync(_roomUId);
+        await webSocketConnection.JoinPublicChatChannelAsync(_roomUId);
 
-        await webSocketConnection.SendPrivateChatMessageAsync(_roomUId, "Hey users in chat how are you?");
+        await webSocketConnection.SendPublicChatMessageAsync(_roomUId, "Hey users in chat how are you?");
     }   
 }
 ```
