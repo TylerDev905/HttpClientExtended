@@ -50,7 +50,7 @@ public class LoginService : HttpClientBaseService
 ```CSharp
 public class WebSocketConnection : ClientWebSocketConnection
     {
-        protected int _uid { get; set; }
+        private int _uid { get; set; }
         
         public List<ReceivedMessage> ReceivedMessages { get; set; }
 
