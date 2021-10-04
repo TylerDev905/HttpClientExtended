@@ -62,7 +62,8 @@ public class WebSocketConnection : ClientWebSocketConnection
             await ConnectAsync(new Uri(socketUrl));
 
             var cookies = _httpConnection.Cookies;
-
+            
+            // this is just an example usually an auth token would be used here.
             await SendAsync($"1 0 0 1025 0 1/{cookies["username"]}:{cookies["passcode"]}");
 
             var result = await ReceiveAsync();
