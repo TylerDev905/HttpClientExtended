@@ -229,7 +229,46 @@ public class StreamRecordingService : HttpClientBaseService
     }
 ```
 
+### Example of a console logger class
 
+```CSharp
+public class ConsoleLogger : IHttpConnectionLogger, IWebSocketLogger
+    {
+        public void Write(string message)
+        {
+            Console.Write(message);
+        }
+        public void WriteLine(string message)
+        {
+            Console.WriteLine(message);
+        }
 
+        public void Write(WebSocketMessageType webSocketMessageType, string data, int length, int time)
+        {
+            if (webSocketMessageType == WebSocketMessageType.Sent)
+            {
+                Console.WriteLine($"Direction: Sent");
+            }
+            else
+            {
+                Console.WriteLine($"Direction: Received");
+            }
 
+            Console.Write($"Time: {time} Length: {length} Payload: {data}");
+        }
 
+        public void WriteLine(WebSocketMessageType webSocketMessageType, string data, int length, int time)
+        {
+            if (webSocketMessageType == WebSocketMessageType.Sent)
+            {
+                Console.WriteLine($"Direction: Sent");
+            }
+            else
+            {
+                Console.WriteLine($"Direction: Received");
+            }
+
+            Console.WriteLine($"Time: {time}\n Length: {length}\n Payload: {data}\n");
+        }
+    }
+```
