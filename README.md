@@ -1,5 +1,5 @@
 # HttpClientExtended
-A HttpClient that provides support for cookies, request/response model json serilization and support for client web sockets.
+A HttpClient that provides support for cookies, loggin, request/response model json serilization and support for client web sockets.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/x6d33gkblthvve23/branch/master?svg=true)](https://ci.appveyor.com/project/TylerH/httpclientextended/branch/master)
 
