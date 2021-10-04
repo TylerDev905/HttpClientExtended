@@ -160,4 +160,76 @@ if (isLoggedIn)
 }
 ```
 
+### Example of using the HttpClientExtended library to record an hls stream to a video file (Recording video segments of DMCA protected video can have consequences. Personal use only.)
+```CSharp
+public class StreamRecordingService : HttpClientBaseService
+    {
+        private readonly Guid _streamSessionId;
+        private bool _isRecording { get; set; } = true;
+        public StreamRecordingService(IHttpConnectionLogger logger, HttpConnection connection) : base(logger, connection) 
+        {
+            _streamSessionId = Guid.NewGuid();
+        }
+        public async Task RecordStreamAsync(RoomDetails roomDetails, string outputDirectory)
+        {
+            var hlsSource = roomDetails.HlsSource;
+            
+            var playList = await _httpConnection.GetAsync(hlsSource.AbsolutePath);
+
+            var chunkListFileName = Regex.Matches(playList, "chunklist_(.{1,}).m3u8")
+                .Cast<Match>()
+                .Select(m => m.Groups[0].Value)
+                .Last();
+
+            var mediaRoute = $"{hlsSource.Segments[0]}{hlsSource.Segments[1]}{hlsSource.Segments[2]}";
+
+            var fileName = @$"{outputDirectory}\{roomDetails.BroadcasterUsername}-{_streamSessionId}.ts";
+
+            using (var fileStream = new FileStream(fileName, FileMode.Create))
+            {
+                var lastSegment = string.Empty;
+
+                while (_isRecording)
+                {
+                    var chunkListRelativePath = $"{mediaRoute}{chunkListFileName}";
+                    var chunkList = await _httpConnection.GetAsync(chunkListRelativePath);
+
+                    var videoSegmentFileName = Regex.Matches(chunkList, "stream_(.{1,})\\.ts")
+                        .Cast<Match>()
+                        .Select(m => m.Groups[0].Value)
+                        .Last();
+
+                    if (lastSegment != videoSegmentFileName)
+                    {
+                        lastSegment = videoSegmentFileName;
+
+                        var videoSegmentRelativePath = $"{mediaRoute}{videoSegmentFileName}";
+
+                        var videoStream = await _httpConnection.GetStreamAsync(videoSegmentRelativePath);
+
+                        _logger.WriteLine($"Saving video segment {videoSegmentFileName}");
+
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            videoStream.CopyTo(memoryStream);
+                            fileStream.Write(memoryStream.ToArray());
+                        }
+                    }
+
+                    await Task.Delay(500);
+                }
+            }
+            
+        }
+        public void StopRecording()
+        {
+            _logger.WriteLine("Recording has been stopped");
+            _isRecording = false;
+        }
+    }
+```
+
+
+
+
 
