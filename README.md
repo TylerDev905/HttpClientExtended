@@ -32,7 +32,7 @@ public class LoginService : HttpClientBaseService
 ```CSharp
         var logger = new ConsoleLogger();
 
-          using (var connection = new HttpConnection(logger, new Uri("https://www.mywebsite/")))
+          using (var connection = new HttpConnection(logger, new Uri("https://www.mywebsite.com/")))
           {
               var loginService = new LoginService(logger, connection);
 
