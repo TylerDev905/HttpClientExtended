@@ -153,10 +153,7 @@ if (isLoggedIn)
         
         await webSocketConnection.JoinPrivateChatChannelAysnc(_roomUId);
 
-        while (true)
-        {
-            await webSocketConnection.SendPrivateChatMessageAysnc(_roomUId, "Hey user in chat how are you?");
-        }
+        await webSocketConnection.SendPrivateChatMessageAysnc(_roomUId, "Hey users in chat how are you?");
     }   
 }
 ```
