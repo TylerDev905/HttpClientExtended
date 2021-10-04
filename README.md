@@ -55,7 +55,7 @@ public class WebSocketConnection : ClientWebSocketConnection
 
         public WebSocketConnection(IWebSocketLogger logger, HttpConnection connection) : base(logger, connection) { }
         
-        public async Task ConnectAysnc(int socketServerId)
+        public async Task ConnectAsync(int socketServerId)
         {
             var socketUrl = $"wss://chatServer{socketServerId}.mywebsite.com/chat";
 
@@ -69,25 +69,25 @@ public class WebSocketConnection : ClientWebSocketConnection
 
             _uid = int.Parse(result.Split(' ')[2]);
         }
-        public async Task JoinPublicChatChannelAysnc(int roomUid)
+        public async Task JoinPublicChatChannelAsync(int roomUid)
             => await SendAsync($"51 {_uid} 0 {roomUid} 9");
 
-        public async Task SendPublicChatMessageAysnc(int roomUid, string message)
+        public async Task SendPublicChatMessageAsync(int roomUid, string message)
             => await SendAsync($"50 {_uid} {roomUid} 0 0 {Uri.EscapeDataString(message)}");
 
-        public async Task LeavePublicChatChannelAysnc(int roomUid)
+        public async Task LeavePublicChatChannelAsync(int roomUid)
             => await SendAsync($"51 {_uid} 0 {roomUid} 2");
         
-        public async Task JoinPrivateChatChannelAysnc(int roomUid)
+        public async Task JoinPrivateChatChannelAsync(int roomUid)
             => await SendAsync($"57 {_uid} 0 1 {roomUid}");
 
-        public async Task SendPrivateChatMessageAysnc(int roomUid, string message)
+        public async Task SendPrivateChatMessageAsync(int roomUid, string message)
         {
             await SendAsync($"75 {_uid} 0 {roomUid} 0");
 
             await SendAsync($"3 {roomUid} {_uid} 0 0 {Uri.EscapeDataString(message)}");
         }
-        public async Task LeavePrivateChatChannelAysnc(int roomUid) 
+        public async Task LeavePrivateChatChannelAsync(int roomUid) 
             => await SendAsync($"57 {_uid} 0 2 {roomUid}");
 
         public async Task StayAwakeAsync()
@@ -149,11 +149,11 @@ if (isLoggedIn)
     using(var webSocketConnection = new WebSocketConnection(logger, httpConnection))
     {
         // connect to the chat server 57
-        await webSocketConnection.ConnectAysnc(57);
+        await webSocketConnection.ConnectAsync(57);
         
-        await webSocketConnection.JoinPrivateChatChannelAysnc(_roomUId);
+        await webSocketConnection.JoinPrivateChatChannelAsync(_roomUId);
 
-        await webSocketConnection.SendPrivateChatMessageAysnc(_roomUId, "Hey users in chat how are you?");
+        await webSocketConnection.SendPrivateChatMessageAsync(_roomUId, "Hey users in chat how are you?");
     }   
 }
 ```
