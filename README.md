@@ -160,7 +160,7 @@ if (isLoggedIn)
 }
 ```
 
-### Example of using the HttpClientExtended library to record an hls stream to a video file (Recording video segments of DMCA protected video can have consequences. Personal use only.)
+### Example of using the HttpClientExtended library to record an hls stream to a video file.
 ```CSharp
 public class StreamRecordingService : HttpClientBaseService
     {
