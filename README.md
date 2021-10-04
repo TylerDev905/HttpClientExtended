@@ -146,7 +146,7 @@ public class WebSocketConnection : ClientWebSocketConnection
 if (isLoggedIn)
 {
 
-    using(var webSocketConnection = new WebSocketConnection(logger, mfcHttpConnection))
+    using(var webSocketConnection = new WebSocketConnection(logger, httpConnection))
     {
         // connect to the chat server 57
         await webSocketConnection.ConnectAysnc(57);
